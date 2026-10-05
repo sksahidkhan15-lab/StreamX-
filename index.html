@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StreamX Player — Professional IPTV Streaming</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#050611">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StreamX Player">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root{--bg-color:#050611;--main-surface:#0B0D18;--elevated-card:#12162A;--emerald:#22B8FF;--emerald-hover:#8A2BFF;--secondary-green:#6B3CFF;--brand-gradient:linear-gradient(135deg,#00D9FF 0%,#315BFF 48%,#E000FF 100%);--text-primary:#F7F8FF;--text-secondary:#A5ABC2;--border-color:#292D4B;--error-color:#FF6262;--nav-height:64px;--sidebar-width:260px}
@@ -960,6 +966,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     renderDrawerChannels();
     startAutoRefresh();
 });
+</script>
+
+<script>
+// StreamX PWA service worker registration. This does not change the player UI or controls.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
