@@ -6,8 +6,8 @@
     <title>StreamX Player — Professional IPTV Streaming</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root{--bg-color:#080B0A;--main-surface:#111713;--elevated-card:#18221C;--emerald:#20D68A;--emerald-hover:#17b874;--secondary-green:#12A76B;--text-primary:#F4F7F5;--text-secondary:#9AA9A0;--border-color:#29372F;--error-color:#FF6262;--nav-height:64px;--sidebar-width:260px}
-        [data-theme="light"]{--bg-color:#F0F4F1;--main-surface:#FFFFFF;--elevated-card:#E4ECE6;--emerald:#12A76B;--emerald-hover:#0E8555;--secondary-green:#20D68A;--text-primary:#111713;--text-secondary:#55665D;--border-color:#CBD7D0;--error-color:#D93838}
+        :root{--bg-color:#050611;--main-surface:#0B0D18;--elevated-card:#12162A;--emerald:#22B8FF;--emerald-hover:#8A2BFF;--secondary-green:#6B3CFF;--brand-gradient:linear-gradient(135deg,#00D9FF 0%,#315BFF 48%,#E000FF 100%);--text-primary:#F7F8FF;--text-secondary:#A5ABC2;--border-color:#292D4B;--error-color:#FF6262;--nav-height:64px;--sidebar-width:260px}
+        [data-theme="light"]{--bg-color:#F4F2FF;--main-surface:#FFFFFF;--elevated-card:#EAE7FF;--emerald:#315BFF;--emerald-hover:#8A2BFF;--secondary-green:#D000FF;--brand-gradient:linear-gradient(135deg,#00BFFF 0%,#315BFF 48%,#D000FF 100%);--text-primary:#141522;--text-secondary:#5E6278;--border-color:#D5D1EA;--error-color:#D93838}
         *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
         html, body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;position:fixed;background-color:var(--bg-color);color:var(--text-primary)}
         .app-container{display:flex;width:100vw;height:100vh;position:relative;overflow:hidden}
@@ -40,6 +40,13 @@
         .player-top-bar{display:flex;justify-content:space-between;align-items:center;gap:8px}.player-channel-info{display:flex;align-items:center;gap:8px;min-width:0}.player-channel-logo{width:30px;height:30px;flex:0 0 30px;border-radius:6px;background-color:var(--elevated-card);object-fit:contain;padding:3px}
         .player-bottom-bar{display:flex;flex-direction:column;gap:7px}.player-toolbar{display:flex;justify-content:space-between;align-items:center;gap:7px}.toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}
         .player-btn{background:rgba(12,18,14,.78);border:1px solid rgba(255,255,255,.16);color:#fff;min-height:34px;padding:7px 10px;border-radius:999px;cursor:pointer;font-weight:500;font-size:.82rem;display:inline-flex;align-items:center;justify-content:center;gap:5px;backdrop-filter:blur(8px);transition:background .2s}.player-btn.icon-only{width:35px;min-width:35px;padding:0;font-size:1rem}.player-center-controls{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:12px}.player-center-controls .player-btn{width:40px;height:40px;padding:0;font-size:1.1rem}.player-center-controls .main-play{width:52px;height:52px;font-size:1.4rem;background:var(--emerald);color:#08130d;border:0}.player-progress-row{display:flex;align-items:center;gap:7px;color:#fff;font-size:.74rem;text-shadow:0 1px 3px #000}.player-progress{flex:1;min-width:30px;height:4px;accent-color:var(--emerald)}.player-time{white-space:nowrap;font-variant-numeric:tabular-nums}.player-volume{width:58px;accent-color:var(--emerald)}.player-control-label{font-size:.72rem;color:#e1e9e4}.player-btn:hover{background:rgba(255,255,255,.2)}.player-btn.active{background:var(--emerald);color:#080B0A}
+        .player-btn.compact-action{width:35px;min-width:35px;height:35px;min-height:35px;padding:0;font-size:1rem}
+        .player-lock-overlay{position:absolute;inset:0;z-index:560;display:none;align-items:center;justify-content:center;pointer-events:none}
+        .player-lock-overlay.active{display:flex}
+        .player-lock-badge{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(12,18,14,.82);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;backdrop-filter:blur(8px);pointer-events:auto;cursor:pointer;opacity:.88}
+        .player-unlock-prompt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;align-items:center;gap:7px;background:rgba(12,18,14,.9);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:9px 13px;font-size:.82rem;cursor:pointer;backdrop-filter:blur(8px);pointer-events:auto}
+        .player-lock-overlay.prompt .player-lock-badge{display:none}
+        .player-lock-overlay.prompt .player-unlock-prompt{display:flex}
         .channel-drawer{position:absolute;top:0;right:0;bottom:0;width:310px;max-width:86vw;background-color:rgba(17,23,19,.95);backdrop-filter:blur(12px);border-left:1px solid var(--border-color);z-index:600;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease}.channel-drawer.active{transform:translateX(0)}
         .drawer-header{padding:14px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center}.drawer-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;-webkit-overflow-scrolling:touch}.drawer-channel-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;transition:background .2s;border:1px solid transparent;min-height:44px}.drawer-logo{width:30px!important;height:30px!important;flex:0 0 30px!important;max-width:30px;max-height:30px;object-fit:contain;border-radius:6px;padding:2px;background:rgba(255,255,255,.05)}.drawer-channel-item .logo-fallback{width:30px!important;height:30px!important;flex-basis:30px!important;min-width:30px!important;font-size:13px!important}.drawer-channel-item:hover{background-color:var(--elevated-card)}.drawer-channel-item.active{background-color:rgba(32,214,138,.15);border-color:var(--emerald)}
         .spinner{width:40px;height:40px;border:3px solid rgba(32,214,138,.2);border-top-color:var(--emerald);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
@@ -51,6 +58,18 @@
         .logo-fallback{width:44px;height:44px;flex:0 0 44px;border-radius:8px;background:var(--elevated-card);display:inline-flex;align-items:center;justify-content:center;color:var(--emerald);font-size:20px}.player-logo-fallback{width:40px;height:40px;flex:0 0 40px;border-radius:8px;background:var(--elevated-card);display:inline-flex;align-items:center;justify-content:center;color:var(--emerald)}
         .local-video-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px}.local-video-item{padding:16px;border:1px solid var(--border-color);border-radius:12px;background:var(--main-surface);display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0}.local-video-item:hover{border-color:var(--emerald)}.local-video-icon{width:44px;height:44px;border-radius:8px;background:var(--elevated-card);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--emerald);flex-shrink:0}
         @media(max-width:768px){sidebar{display:none}.bottom-nav{display:flex}.views-container{padding-bottom:calc(var(--nav-height) + 24px)}.player-controls-overlay{padding:9px}.player-toolbar{gap:5px;flex-wrap:wrap}.toolbar-group{gap:4px;flex-wrap:wrap}.player-btn{min-height:32px;padding:6px 8px;font-size:.75rem}.player-btn.icon-only{width:32px;min-width:32px}.player-center-controls{gap:9px}.player-center-controls .player-btn{width:35px;height:35px}.player-center-controls .main-play{width:45px;height:45px}.player-volume{width:44px}.player-progress-row{gap:5px}}
+        /* StreamX logo-inspired color theme only: cyan + blue + violet + magenta. Layout and sizing remain unchanged. */
+        .logo-icon{background:var(--brand-gradient)!important;box-shadow:0 4px 12px rgba(49,91,255,.30)!important}
+        .nav-item.active{background:var(--brand-gradient)!important;color:#fff!important;box-shadow:0 4px 14px rgba(98,55,255,.28)!important}
+        .nav-item.active svg{fill:#fff!important}
+        .btn-primary{background:var(--brand-gradient)!important;color:#fff!important}
+        .btn-primary:hover{background:linear-gradient(135deg,#00BFFF 0%,#7B2CFF 52%,#FF00C8 100%)!important}
+        .bottom-nav-item.active{color:#7B4DFF!important}
+        .card:hover,.channel-card:hover,.local-video-item:hover{border-color:#6B4DFF!important}
+        .form-input:focus{border-color:#6B4DFF!important}
+        .spinner{border-color:rgba(49,91,255,.20)!important;border-top-color:#D000FF!important}
+        .logo-fallback,.player-logo-fallback{color:#5CCBFF!important}
+        .badge,.tag{border-color:rgba(107,60,255,.45)!important}
     </style>
 </head>
 <body>
@@ -100,6 +119,10 @@
 <div class="player-view" id="playerView">
     <div class="video-container" id="videoContainer">
         <video id="videoPlayer" playsinline controlslist="nodownload"></video>
+        <div class="player-lock-overlay" id="playerLockOverlay">
+            <button class="player-lock-badge" id="playerLockBadge" title="Unlock controls" aria-label="Unlock controls">🔒</button>
+            <button class="player-unlock-prompt" id="playerUnlockPrompt" title="Unlock controls" aria-label="Unlock controls">🔓 Unlock</button>
+        </div>
         <div class="loading-overlay" id="playerLoading" style="display:none">
             <button class="player-btn" id="loadingBackBtn" style="margin-bottom: 8px;">← Back / Cancel</button>
             <div class="spinner"></div>
@@ -109,14 +132,14 @@
         <div class="player-controls-overlay controls-hidden" id="playerControls">
             <div class="player-top-bar">
                 <div class="player-channel-info"><img src="" class="player-channel-logo" id="currentPlayerLogo" style="display:none"><span id="currentPlayerLogoFallback" class="player-logo-fallback" style="display:none">▶</span><div style="min-width:0"><div style="font-weight:650;font-size:.95rem;text-shadow:0 2px 4px rgba(0,0,0,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="currentPlayerName">Channel Name</div><div style="font-size:.74rem;color:#c5d0c9" id="currentPlayerGroup">Category</div></div></div>
-                <div class="toolbar-group"><button class="player-btn icon-only" id="toggleDrawerBtn" title="Channels" aria-label="Channels">☷</button><button class="player-btn icon-only" id="fullscreenBtn" title="Fullscreen" aria-label="Fullscreen">⛶</button><button class="player-btn icon-only" id="closePlayerBtn" title="Close player" aria-label="Close player">✕</button></div>
+                <div class="toolbar-group"><button class="player-btn icon-only" id="toggleDrawerBtn" title="Channels" aria-label="Channels">☷</button><button class="player-btn icon-only" id="closePlayerBtn" title="Close player" aria-label="Close player">✕</button></div>
             </div>
             <div class="player-center-controls"><button class="player-btn" id="prevChannelBtn" title="Previous channel" aria-label="Previous channel">⏮</button><button class="player-btn main-play" id="playPauseBtn" title="Play/Pause" aria-label="Play/Pause">▶</button><button class="player-btn" id="nextChannelBtn" title="Next channel" aria-label="Next channel">⏭</button></div>
             <div class="player-bottom-bar">
                 <div class="player-progress-row"><span class="player-time" id="playerCurrentTime">LIVE</span><input class="player-progress" id="playerSeek" type="range" min="0" max="1000" value="0" aria-label="Seek video"><span class="player-time" id="playerDuration">LIVE</span></div>
                 <div class="player-toolbar">
                     <div class="toolbar-group"><button class="player-btn" id="muteBtn" title="Mute/unmute" aria-label="Mute/unmute">🔊</button><input class="player-volume" id="playerVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"><span class="player-control-label" id="playerVolumeLabel">100%</span></div>
-                    <div class="toolbar-group"><button class="player-btn" id="toggleDrawerBtnBottom" title="Channel list">📺 Channels</button><button class="player-btn" id="fullscreenBtnBottom" title="Fullscreen">⛶</button></div>
+                    <div class="toolbar-group"><button class="player-btn compact-action" id="rotateBtn" title="Rotate" aria-label="Rotate">↻</button><button class="player-btn compact-action" id="lockBtn" title="Lock screen" aria-label="Lock screen">🔒</button></div>
                 </div>
             </div>
         </div>
@@ -154,7 +177,7 @@ try {
     console.error("Storage read error", e);
 }
 
-let hlsInstance=null,refreshTimer=null,controlsTimer=null,currentObjectUrl=null,localFiles=[];
+let hlsInstance=null,refreshTimer=null,controlsTimer=null,currentObjectUrl=null,localFiles=[],playerLocked=false,unlockPromptTimer=null;
 
 function parseM3U(text){
     const lines=text.split(/\r?\n/);
@@ -344,6 +367,11 @@ function showPlayerError(message){
 function setControlsVisible(show){
     const el=document.getElementById('playerControls');
     if(!el) return;
+    if(playerLocked){
+        el.classList.add('controls-hidden');
+        if(controlsTimer) clearTimeout(controlsTimer);
+        return;
+    }
     el.classList.toggle('controls-hidden',!show);
     if(controlsTimer) clearTimeout(controlsTimer);
     if(show&&document.getElementById('playerView').classList.contains('active')){
@@ -556,7 +584,18 @@ function removePlaylist(index){
 }
 
 function closePlayer(){
+    playerLocked=false;
+    if(unlockPromptTimer) clearTimeout(unlockPromptTimer);
+    const lockOverlay=document.getElementById('playerLockOverlay');
+    if(lockOverlay) lockOverlay.classList.remove('active','prompt');
     const pv=document.getElementById('playerView');
+    try{
+        if(screen.orientation && typeof screen.orientation.unlock==='function') screen.orientation.unlock();
+    }catch(e){}
+    try{
+        if(document.fullscreenElement && typeof document.exitFullscreen==='function') document.exitFullscreen();
+    }catch(e){}
+    document.documentElement.setAttribute('data-streamx-orientation','portrait');
     const drawer=document.getElementById('channelDrawer');
     const loading=document.getElementById('playerLoading');
     const err=document.getElementById('playerError');
@@ -707,23 +746,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(prevChannelBtn) prevChannelBtn.onclick=()=>{if(state.currentChannelIndex>0)playChannel(state.currentChannelIndex-1);setControlsVisible(true)};
     if(nextChannelBtn) nextChannelBtn.onclick=()=>{if(state.currentChannelIndex<state.channels.length-1)playChannel(state.currentChannelIndex+1);setControlsVisible(true)};
     
-    const toggleFullscreen=async()=>{
-        const target=document.getElementById('playerView');
-        try{
-            if(!document.fullscreenElement) await (target.requestFullscreen?target.requestFullscreen():video.requestFullscreen());
-            else await document.exitFullscreen();
-        }catch(e){
-            try{await video.requestFullscreen()}catch{}
-        }
-        setControlsVisible(true);
-    };
-    
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const fullscreenBtnBottom = document.getElementById('fullscreenBtnBottom');
-    if(fullscreenBtn) fullscreenBtn.onclick=toggleFullscreen;
-    if(fullscreenBtnBottom) fullscreenBtnBottom.onclick=toggleFullscreen;
-    
     const toggleChannels=()=>{
+        if(playerLocked) return;
         const drawer = document.getElementById('channelDrawer');
         if(drawer) {
             drawer.classList.toggle('active');
@@ -731,14 +755,95 @@ document.addEventListener('DOMContentLoaded',()=>{
         }
         setControlsVisible(true);
     };
-    
+
     const toggleDrawerBtn = document.getElementById('toggleDrawerBtn');
-    const toggleDrawerBtnBottom = document.getElementById('toggleDrawerBtnBottom');
     const closePlayerBtn = document.getElementById('closePlayerBtn');
     if(toggleDrawerBtn) toggleDrawerBtn.onclick=toggleChannels;
-    if(toggleDrawerBtnBottom) toggleDrawerBtnBottom.onclick=toggleChannels;
     if(closePlayerBtn) closePlayerBtn.onclick=closePlayer;
-    
+
+    const rotateBtn=document.getElementById('rotateBtn');
+    if(rotateBtn) rotateBtn.onclick=async()=>{
+        if(playerLocked) return;
+
+        const pv=document.getElementById('playerView');
+        const current=document.documentElement.getAttribute('data-streamx-orientation')||'portrait';
+        const next=current==='landscape'?'portrait':'landscape';
+
+        if(next==='landscape'){
+            // Screen Orientation Lock is reliably available on Android when
+            // the player is fullscreen. Request fullscreen from this user tap.
+            try{
+                if(pv && document.fullscreenElement!==pv && typeof pv.requestFullscreen==='function'){
+                    await pv.requestFullscreen();
+                }
+            }catch(e){}
+
+            try{
+                if(screen.orientation && typeof screen.orientation.lock==='function'){
+                    await screen.orientation.lock('landscape');
+                }
+                document.documentElement.setAttribute('data-streamx-orientation','landscape');
+            }catch(e){
+                // Never apply a broken CSS rotation fallback. Keep the player
+                // intact if this browser does not support orientation locking.
+                document.documentElement.setAttribute('data-streamx-orientation','portrait');
+            }
+        }else{
+            try{
+                if(screen.orientation && typeof screen.orientation.unlock==='function'){
+                    screen.orientation.unlock();
+                }
+            }catch(e){}
+
+            try{
+                if(document.fullscreenElement && typeof document.exitFullscreen==='function'){
+                    await document.exitFullscreen();
+                }
+            }catch(e){}
+
+            document.documentElement.setAttribute('data-streamx-orientation','portrait');
+        }
+
+        setControlsVisible(true);
+    };
+
+    const lockBtn=document.getElementById('lockBtn');
+    const lockOverlay=document.getElementById('playerLockOverlay');
+    const lockBadge=document.getElementById('playerLockBadge');
+    const unlockPrompt=document.getElementById('playerUnlockPrompt');
+
+    const showUnlockPrompt=()=>{
+        if(!playerLocked||!lockOverlay) return;
+        // While locked, keep the lock button completely hidden.
+        // Only show the Unlock prompt after the user touches the video.
+        lockOverlay.classList.add('active','prompt');
+        if(unlockPromptTimer) clearTimeout(unlockPromptTimer);
+        unlockPromptTimer=setTimeout(()=>lockOverlay.classList.remove('active','prompt'),2500);
+    };
+
+    const unlockPlayer=()=>{
+        playerLocked=false;
+        if(lockOverlay) lockOverlay.classList.remove('active','prompt');
+        if(lockBtn){lockBtn.textContent='🔒';lockBtn.title='Lock screen';}
+        setControlsVisible(true);
+    };
+
+    const lockPlayer=()=>{
+        playerLocked=true;
+        const drawer=document.getElementById('channelDrawer');
+        if(drawer) drawer.classList.remove('active');
+        if(controlsTimer) clearTimeout(controlsTimer);
+        // Do NOT leave a lock icon sitting over the video.
+        // The unlock prompt appears only after a video touch.
+        if(lockOverlay) lockOverlay.classList.remove('active','prompt');
+        if(lockBtn){lockBtn.textContent='🔒';lockBtn.title='Unlock screen';}
+        setControlsVisible(false);
+    };
+
+    if(lockBtn) lockBtn.onclick=()=>{ if(playerLocked) unlockPlayer(); else lockPlayer(); };
+    if(lockBadge) lockBadge.onclick=unlockPlayer;
+    if(unlockPrompt) unlockPrompt.onclick=unlockPlayer;
+
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
     const drawerSearchInput = document.getElementById('drawerSearchInput');
     if(closeDrawerBtn) closeDrawerBtn.onclick=()=>{const drawer = document.getElementById('channelDrawer'); if(drawer) drawer.classList.remove('active');setControlsVisible(true)};
@@ -802,15 +907,25 @@ document.addEventListener('DOMContentLoaded',()=>{
     
     const container=document.getElementById('videoContainer');
     if(container){
-        container.addEventListener('pointermove',()=>setControlsVisible(true));
-        container.addEventListener('pointerdown',e=>{
-            if(e.target===video||e.target===container){
-                setControlsVisible(true);
-            }
+        container.addEventListener('pointermove',()=>{
+            if(!playerLocked) setControlsVisible(true);
         });
-        container.addEventListener('touchstart',()=>setControlsVisible(true),{passive:true});
+        container.addEventListener('pointerdown',e=>{
+            if(playerLocked){
+                if(e.target===video||e.target===container) showUnlockPrompt();
+                return;
+            }
+            if(e.target===video||e.target===container) setControlsVisible(true);
+        });
+        container.addEventListener('touchstart',e=>{
+            if(playerLocked){
+                if(e.target===video||e.target===container) showUnlockPrompt();
+                return;
+            }
+            setControlsVisible(true);
+        },{passive:true});
     }
-    
+
     const importLocalFileBtn = document.getElementById('importLocalFileBtn');
     if(importLocalFileBtn){
         importLocalFileBtn.onclick=async()=>{
